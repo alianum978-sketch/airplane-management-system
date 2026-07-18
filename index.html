@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard · SkyManager</title>
+<meta name="description" content="SkyManager — a control-room dashboard for airline ticketing, departures and arrivals." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<!-- Bootstrap 5 + Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+<!-- App styles -->
+<link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ============================= Sidebar ============================= -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-mark"><i class="bi bi-airplane-engines-fill"></i></span>
+      <span class="brand-text">Sky<strong>Manager</strong></span>
+      <button class="sidebar-close ms-auto" id="sidebarCloseBtn" aria-label="Close menu"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Operations</div>
+      <a href="index.html" class="nav-link active"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+      <a href="tickets.html" class="nav-link"><i class="bi bi-ticket-perforated"></i><span>Ticket Management</span></a>
+      <a href="departures.html" class="nav-link"><i class="bi bi-airplane"></i><span>Departures</span></a>
+      <a href="arrivals.html" class="nav-link"><i class="bi bi-airplane-fill" style="display:inline-block;transform:rotate(180deg)"></i><span>Arrivals</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar">AK</div>
+        <div>
+          <div class="user-name">Ayesha Khan</div>
+          <div class="user-role">Flight Ops Admin</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- ============================= Main area ============================ -->
+  <div class="main-area">
+
+    <header class="topbar">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Open menu"><i class="bi bi-list"></i></button>
+      <div class="topbar-title">
+        <h1>Dashboard Overview</h1>
+        <p>Welcome back — here's today's operations at a glance.</p>
+      </div>
+      <div class="topbar-actions">
+        <div class="search-box">
+          <i class="bi bi-search"></i>
+          <input type="text" placeholder="Search flights, tickets…" aria-label="Search" />
+        </div>
+        <button class="icon-btn" aria-label="Notifications"><i class="bi bi-bell"></i><span class="dot"></span></button>
+        <div class="topbar-clock" id="liveClock"></div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Stat cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Flights Today</div>
+              <div class="stat-value" id="statFlights">--</div>
+              <div class="stat-trend up"><i class="bi bi-arrow-up-short"></i>4.2% vs yesterday</div>
+            </div>
+            <div class="stat-icon amber"><i class="bi bi-airplane-engines-fill"></i></div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Active Tickets</div>
+              <div class="stat-value" id="statTickets">--</div>
+              <div class="stat-trend up"><i class="bi bi-arrow-up-short"></i>2.8% vs yesterday</div>
+            </div>
+            <div class="stat-icon sky"><i class="bi bi-ticket-perforated-fill"></i></div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">On-Time Performance</div>
+              <div class="stat-value" id="statOnTime">--</div>
+              <div class="stat-trend down"><i class="bi bi-arrow-down-short"></i>1.1% vs yesterday</div>
+            </div>
+            <div class="stat-icon teal"><i class="bi bi-speedometer2"></i></div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="stat-card">
+            <div>
+              <div class="stat-label">Cancelled / Delayed</div>
+              <div class="stat-value" id="statIssues">--</div>
+              <div class="stat-trend flat"><i class="bi bi-dash"></i>steady vs yesterday</div>
+            </div>
+            <div class="stat-icon coral"><i class="bi bi-exclamation-triangle-fill"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live board (signature element) -->
+      <div class="flap-board mb-4">
+        <div class="flap-board-head">
+          <h2><span class="live-dot"></span> Live Flight Board</h2>
+          <span class="updated" id="boardUpdated">updated --:--:--</span>
+        </div>
+        <div class="flap-row flap-header">
+          <div>Flight</div>
+          <div>Type</div>
+          <div>Route</div>
+          <div>Time</div>
+          <div>Gate</div>
+          <div>Status</div>
+        </div>
+        <div id="flapBoardBody"><!-- rows injected by dashboard.js --></div>
+      </div>
+
+      <!-- Charts -->
+      <div class="row g-3 mb-4">
+        <div class="col-lg-7">
+          <div class="section-card h-100">
+            <div class="section-card-head">
+              <div>
+                <h2>Weekly Flight Volume</h2>
+                <p>Departures vs. arrivals, last 7 days</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="weeklyChart"></canvas></div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="section-card h-100">
+            <div class="section-card-head">
+              <div>
+                <h2>Seat Class Split</h2>
+                <p>Across all active tickets</p>
+              </div>
+            </div>
+            <div class="chart-wrap"><canvas id="classChart"></canvas></div>
+            <div class="legend-row" id="classLegend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent bookings -->
+      <div class="section-card mb-4">
+        <div class="section-card-head">
+          <div>
+            <h2>Recent Bookings</h2>
+            <p>Latest tickets issued across all flights</p>
+          </div>
+          <a href="tickets.html" class="link-more">View all tickets <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="table-responsive-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>Passenger</th>
+                <th>Flight</th>
+                <th>Class</th>
+                <th>Travel Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentBookingsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ============================== Footer ============================ -->
+    <footer class="app-footer">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-text small"><i class="bi bi-airplane-engines-fill"></i> SkyManager</div>
+          <p>A control-room view of every ticket, gate and runway — built for airline operations teams who can't afford surprises.</p>
+        </div>
+        <div>
+          <h6>Product</h6>
+          <a href="index.html">Dashboard</a>
+          <a href="tickets.html">Ticket Management</a>
+          <a href="departures.html">Departures</a>
+          <a href="arrivals.html">Arrivals</a>
+        </div>
+        <div>
+          <h6>Resources</h6>
+          <a href="#">Documentation</a>
+          <a href="#">Support Center</a>
+          <a href="#">System Status</a>
+        </div>
+        <div>
+          <h6>Connect</h6>
+          <div class="social-row">
+            <a href="#" aria-label="X / Twitter"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            <a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
+            <a href="#" aria-label="Email"><i class="bi bi-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 SkyManager. All rights reserved.</span>
+        <span>Airplane Management System — academic project</span>
+      </div>
+    </footer>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
