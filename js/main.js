@@ -1,5 +1,5 @@
 /* =========================================================================
-   SkyManager — shared utilities
+   AirManager — shared utilities
    Loaded on every page before the page-specific controller script.
    ========================================================================= */
 
