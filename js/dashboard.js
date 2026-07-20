@@ -1,5 +1,5 @@
 /* =========================================================================
-   SkyManager — Dashboard controller
+   AirManager — Dashboard controller
    ========================================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
