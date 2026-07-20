@@ -1,5 +1,5 @@
 /* =========================================================================
-   SkyManager — Ticket Management controller
+   AirManager — Ticket Management controller
    Full CRUD against the in-memory TICKETS array from data.js
    ========================================================================= */
 
