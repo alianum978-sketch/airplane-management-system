@@ -1,5 +1,5 @@
 /* =========================================================================
-   SkyManager — Departures controller
+   AirManager — Departures controller
    ========================================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
