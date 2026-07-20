@@ -1,4 +1,4 @@
-# SkyManager — Airplane Management System
+# AirManager — Airplane Management System
 
 A responsive, front-end Airplane Management System built with **HTML5, CSS3, Bootstrap 5** and vanilla **JavaScript**. It gives an airline operations team a single control-room view: a dashboard, ticket management with full CRUD, and live departures / arrivals boards.
 
